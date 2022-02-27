@@ -5,7 +5,9 @@ import {
     getContact,
     postContact,
     putContact,
-    deleteContact
+    deleteContact,
+    postContactMany,
+    deleteAllContact
 } from "../controllers";
 
 import { AsyncWrapper } from "../utils/asyncWrapper";
@@ -18,9 +20,13 @@ router.get("/:id", AsyncWrapper(getContact));
 
 router.post("/", AsyncWrapper(postContact));
 
+router.post("/many", AsyncWrapper(postContactMany));
+
 router.put("/:id", AsyncWrapper(putContact));
 
 router.delete("/:id", AsyncWrapper(deleteContact));
+
+router.delete("/", AsyncWrapper(deleteAllContact));
 
 export const contacts = {
     baseUrl: "/contacts",

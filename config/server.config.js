@@ -4,7 +4,6 @@ import helmet from "helmet";
 import basicAuth from "express-basic-auth";
 import { MongoDao } from "./db";
 import { fakeContacts } from "../utils";
-import { ConfigService } from "./config-service";
 import { connectDb } from "./db.config";
 
 export class ServerConfig {
@@ -109,7 +108,7 @@ export class ServerConfig {
 
     async listen() {
         try {
-            await connectDb();
+            await connectDb("contactsdb");
             this.app.listen(this.port, () => {
                 console.log(`Listening on port: ${this.port}`);
             });
