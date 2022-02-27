@@ -1,0 +1,26 @@
+{
+  "name": "social-network-back",
+  "version": "1.0.0",
+  "description": "Back-End Social Network",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andressalro/social-network-back.git"
+  },
+  "author": "Andres Salgado Rojas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andressalro/social-network-back/issues"
+  },
+  "homepage": "https://github.com/andressalro/social-network-back#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "eslint": "^8.10.0",
+    "express": "^4.17.3",
+    "express-basic-auth": "^1.2.1",
+    "helmet": "^5.0.2"
+  }
+}
