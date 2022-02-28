@@ -1,25 +1,19 @@
 import Express, { Router } from "express";
+import { AuthMiddleware } from "../middlewares";
 import cors from "cors";
 import helmet from "helmet";
 import basicAuth from "express-basic-auth";
-import { MongoDao } from "./db";
-import { fakeContacts } from "../utils";
 import { connectDb } from "./db.config";
 
 export class ServerConfig {
-    #userAccounts = {
-        admin: "supersecret2"
-    };
-
     constructor({ port, middlewares, routers}) {
         this.app = Express();
         this.app.set("env", process.env.NODE_ENV);
         this.app.set("port", port);
         this.registerCORSMiddleware()
             .registerHelmetMiddleware()
-            .registerBasicAuthMiddleware()
+            .registerJwtPassportMiddleware()
             .registerJSONMiddleware();
-        
         middlewares && middlewares.forEach(elMiddleware => {
             this.registerMiddleware(elMiddleware);
         });
@@ -33,12 +27,15 @@ export class ServerConfig {
         routers && routers.forEach(({ baseUrl, router }) => {
             this.registerRouter(baseUrl, router);
         });
+        
+    
 
-        this.registerMiddleware(
-            function(req, res, next) {
+        this.registerMiddleware((req, res, next) => {
+            console.log("entro");
                 var err = new Error("Not Found");
                 err.statusCode = 404;
                 next(err);
+                
             }
         );
         this.registerErrorHandlingMiddleware();
@@ -71,19 +68,8 @@ export class ServerConfig {
         this.registerMiddleware(cors());
         return this;
     }
-
     registerHelmetMiddleware() {
         this.app.use(helmet());
-        return this;
-    }
-
-    registerBasicAuthMiddleware() {
-        this.registerMiddleware(
-            basicAuth({
-                users: this.#userAccounts,
-                challenge: true
-            })
-        );
         return this;
     }
 
@@ -99,16 +85,24 @@ export class ServerConfig {
                     });
                 }
             )
-        : this.registerMiddleware(({ statusCode, message }, req, res, next) => {
+        : this.registerMiddleware(({ statusCode = 500, message }, req, res, next) => {
+            console.log(statusCode);
             res.status(statusCode);
             res.json({ statusCode, message });
         });
         return this;
     }
 
+    registerJwtPassportMiddleware() {
+        const authMdlw = new AuthMiddleware();
+        const passportJwtMiddleware = authMdlw.registerJwtStrategy();
+        this.registerMiddleware(passportJwtMiddleware);
+        return this;
+      }
+
     async listen() {
         try {
-            await connectDb("contactsdb");
+            await connectDb("socialnetworkdb");
             this.app.listen(this.port, () => {
                 console.log(`Listening on port: ${this.port}`);
             });

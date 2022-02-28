@@ -1,5 +1,4 @@
-import defaultMiddleware from "./default";
+import RouteProtectorMiddleware from "./route-protector.middleware";
+import AuthMiddleware from "./auth.middleware";
 
-export default function registerMiddlewares(server) {
-  defaultMiddleware(server);
-}
+export { RouteProtectorMiddleware, AuthMiddleware };
