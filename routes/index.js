@@ -1,3 +1,4 @@
-export { rootRouter } from "./root";
-export { contacts } from "./contacts";
-export { groups } from "./groups";
+export { routerV1 } from "./v1";
+export { routerV2 } from "./v2";
+export { redirectRouter } from "./redirect.routes";
+export { authRouter } from "./auth/auth.router";
