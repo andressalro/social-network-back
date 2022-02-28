@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    title: String,
-    description: String,
+    title: { type: String, required: true},
+    description: { type: String, required: true},
     comments: [
         {
         type: mongoose.Schema.Types.ObjectId,
