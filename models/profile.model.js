@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
+const profileSchema = new mongoose.Schema(
   {
     userName: {
         type: String,
@@ -16,4 +16,4 @@ const userSchema = new mongoose.Schema(
   { versionKey: false }
 );
 
-export const Profile = mongoose.model("Profile", userSchema);
+export const Profile = mongoose.model("Profile", profileSchema);

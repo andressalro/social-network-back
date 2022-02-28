@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
+const postSchema = new mongoose.Schema(
   {
     title: { type: String, required: true},
     description: { type: String, required: true},
@@ -19,4 +19,4 @@ const userSchema = new mongoose.Schema(
   { versionKey: false }
 );
 
-export const Posts = mongoose.model("Posts", userSchema);
+export const Posts = mongoose.model("Posts", postSchema);

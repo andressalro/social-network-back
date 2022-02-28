@@ -1,13 +1,27 @@
-import {Posts} from "../models";
+import {Posts, User} from "../models";
 import { errorHandler, formatUtils, generateSelf } from "../utils";
 export default class PostsService {
     constructor() {}
 
-    async postCreatePosts(postsData) {
+    async postCreatePosts(user, postsData) {        
+        const userId = user._id;
+        console.log(userId);
         const newPosts = new Posts(postsData);
         try {
             const insertedPosts = await newPosts.save();
-            return Boolean(insertedPosts);
+            const result = await User.updateOne(
+                { _id: userId },
+                {
+                    $addToSet: { posts: insertedPosts._id }
+                }
+              ).select({
+                firstName: 1,
+                lastName: 1,
+                primaryEmailAddress: 1,
+                contacts: 1
+              });
+              console.log(result);
+            return result.matchedCount === 1 && result.modifiedCount > 0;
         } catch (error) {
            throw errorHandler(error.message, 400);
         }
@@ -41,6 +55,7 @@ export default class PostsService {
     }
 
     async deleteUserPosts(user, postsId) {
+        
         const userFound = user.posts.find(
             postsOne => postsOne.toString() === postsId
         );
@@ -49,14 +64,15 @@ export default class PostsService {
             const result = await Posts.deleteOne({
                 _id: postsId
             });
-        
-            if(result.ok === 1 && result.deletedCount > 0) {
+            console.log(result);
+            if(result.deletedCount > 0) {
                 user.posts = user.posts.filter(
                     postsOne => postsOne.toString() !== postsId
                 );
                 
                 try {
                     const userUpdated = await user.save();
+                    
                     return Boolean(userUpdated);
                 } catch(error) {
                     throw errorHandler(error.message, 400);

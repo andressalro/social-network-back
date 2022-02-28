@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
+const commentsSchema = new mongoose.Schema(
   {
     description: String,
   },
@@ -8,4 +8,4 @@ const userSchema = new mongoose.Schema(
   { versionKey: false }
 );
 
-export const Comments = mongoose.model("Comments", userSchema);
+export const Comments = mongoose.model("Comments", commentsSchema);

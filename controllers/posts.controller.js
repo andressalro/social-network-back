@@ -2,9 +2,11 @@ import { PostsService } from "../services";
 
 const postsService = new PostsService();
 export const postCreatePosts = async (req, res) => {
+    const user = req.user;
     const postsData = req.body;
 
     const createdPosts = await postsService.postCreatePosts(
+        user,
         postsData
     );
 
